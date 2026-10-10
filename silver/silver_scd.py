@@ -71,6 +71,7 @@ WHEN MATCHED AND target.row_hash != source.row_hash THEN
 
 spark.sql(f"""
 INSERT INTO {silver_schema}.turbine_registry_silver
+    (turbine_id, model, rated_power_kw, location, status, row_hash, valid_from, valid_to, is_current)
 SELECT
     s.turbine_id, s.model, s.rated_power_kw, s.location, s.status, s.row_hash,
     current_timestamp() AS valid_from,
