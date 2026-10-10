@@ -1,13 +1,16 @@
 # Databricks notebook source
+# /// script
+# [tool.databricks.environment]
+# environment_version = "6"
+# ///
 # MAGIC %md
 # MAGIC # Bronze layer – turbine registry ingest
 # MAGIC Reads the raw JSON snapshots from the volume and appends them to the bronze table, tagging each row with ingestion time and source file.
 
 # COMMAND ----------
 
-
-dbutils.widgets.text("schema", "")
-schema = dbutils.widgets.get("schema")
+dbutils.widgets.text("bronze_schema", "")
+bronze_schema = dbutils.widgets.get("bronze_schema")
 
 # COMMAND ----------
 
@@ -15,7 +18,7 @@ spark.sql("USE CATALOG dbr_dev_ua5816bd")
 
 # COMMAND ----------
 
-raw_df = spark.read.json(f"/Volumes/dbr_dev_ua5816bd/{schema}/raw")
+raw_df = spark.read.json(f"/Volumes/dbr_dev_ua5816bd/{bronze_schema}/raw")
 
 # COMMAND ----------
 
@@ -34,8 +37,8 @@ bronze_df = (raw_df
 
 (bronze_df.write
     .mode("append")
-    .saveAsTable(f"{schema}.turbine_registry_bronze"))
+    .saveAsTable(f"{bronze_schema}.turbine_registry_bronze"))
 
 # COMMAND ----------
 
-display(spark.table(f"{schema}.turbine_registry_bronze").orderBy("ingestion_ts"))
+display(spark.table(f"{bronze_schema}.turbine_registry_bronze").orderBy("ingestion_ts"))
