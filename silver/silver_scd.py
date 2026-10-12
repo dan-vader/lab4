@@ -12,8 +12,10 @@
 
 dbutils.widgets.text("bronze_schema", "")
 dbutils.widgets.text("silver_schema", "")
+dbutils.widgets.text("catalog", "")
 bronze_schema = dbutils.widgets.get("bronze_schema")
 silver_schema = dbutils.widgets.get("silver_schema")
+catalog = dbutils.widgets.get("catalog")
 
 # COMMAND ----------
 
@@ -24,7 +26,7 @@ silver_schema = dbutils.widgets.get("silver_schema")
 
 # COMMAND ----------
 
-spark.sql("USE CATALOG dbr_dev_ua5816bd")
+spark.sql(f"USE CATALOG {catalog}")
 
 # COMMAND ----------
 
