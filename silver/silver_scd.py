@@ -17,6 +17,13 @@ silver_schema = dbutils.widgets.get("silver_schema")
 
 # COMMAND ----------
 
+   from datetime import datetime
+
+   run_ts = datetime.utcnow()
+   run_ts_str = run_ts.strftime("%Y-%m-%d %H:%M:%S.%f")[:-3]
+
+# COMMAND ----------
+
 spark.sql("USE CATALOG dbr_dev_ua5816bd")
 
 # COMMAND ----------
@@ -64,7 +71,7 @@ MERGE INTO {silver_schema}.turbine_registry_silver AS target
 USING staged_latest AS source
 ON target.turbine_id = source.turbine_id AND target.is_current = true
 WHEN MATCHED AND target.row_hash != source.row_hash THEN
-  UPDATE SET target.valid_to = current_timestamp(), target.is_current = false
+  UPDATE SET target.valid_to = TIMESTAMP'{run_ts_str}', target.is_current = false
 """)
 
 # COMMAND ----------
@@ -74,7 +81,7 @@ INSERT INTO {silver_schema}.turbine_registry_silver
     (turbine_id, model, rated_power_kw, location, status, row_hash, valid_from, valid_to, is_current)
 SELECT
     s.turbine_id, s.model, s.rated_power_kw, s.location, s.status, s.row_hash,
-    current_timestamp() AS valid_from,
+    TIMESTAMP'{run_ts_str}' AS valid_from,
     CAST(NULL AS TIMESTAMP) AS valid_to,
     true AS is_current
 FROM staged_latest s
