@@ -19,12 +19,4 @@ spark.sql(f"USE CATALOG {catalog}")
 
 # COMMAND ----------
 
-display(spark.sql(f"OPTIMIZE {silver_schema}.turbine_registry_silver"))
-
-# COMMAND ----------
-
 spark.sql(f"VACUUM {silver_schema}.turbine_registry_silver RETAIN 168 HOURS")
-
-# COMMAND ----------
-
-display(spark.sql(f"DESCRIBE HISTORY {silver_schema}.turbine_registry_silver").limit(10))

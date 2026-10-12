@@ -25,7 +25,6 @@ raw_df = spark.read.json(f"/Volumes/dbr_dev_ua5816bd/{bronze_schema}/raw")
 # COMMAND ----------
 
 raw_df.printSchema()
-display(raw_df)
 
 # COMMAND ----------
 
@@ -40,7 +39,3 @@ bronze_df = (raw_df
 (bronze_df.write
     .mode("append")
     .saveAsTable(f"{bronze_schema}.turbine_registry_bronze"))
-
-# COMMAND ----------
-
-display(spark.table(f"{bronze_schema}.turbine_registry_bronze").orderBy("ingestion_ts"))

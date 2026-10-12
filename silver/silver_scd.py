@@ -75,7 +75,3 @@ LEFT JOIN {silver_schema}.turbine_registry_silver t
     ON s.turbine_id = t.turbine_id AND t.is_current = true AND t.row_hash = s.row_hash
 WHERE t.turbine_id IS NULL
 """)
-
-# COMMAND ----------
-
-display(spark.table(f"{silver_schema}.turbine_registry_silver").orderBy("turbine_id", "valid_from"))
