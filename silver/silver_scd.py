@@ -30,22 +30,6 @@ spark.sql(f"USE CATALOG {catalog}")
 
 # COMMAND ----------
 
-spark.sql(f"""
-CREATE TABLE IF NOT EXISTS {silver_schema}.turbine_registry_silver (
-    turbine_id STRING,
-    model STRING,
-    rated_power_kw INT,
-    location STRING,
-    status STRING,
-    row_hash STRING,
-    valid_from TIMESTAMP,
-    valid_to TIMESTAMP,
-    is_current BOOLEAN
-)
-""")
-
-# COMMAND ----------
-
 from pyspark.sql import Window
 from pyspark.sql.functions import sha2, concat_ws, col, row_number, desc
 
